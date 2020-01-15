@@ -25,7 +25,9 @@ videowiki.post('/login',(req,res)=>{
     let email=req.body.email 
     let password=req.body.password 
     let response = postvideowiki.login()
+    console.log(response)
     response.then((result)=>{
+        console.log(result)
         for(let i=0; i<result.length; i++){
             if((result[i]["email"]==email) && (result[i]["password"]==password)){
                 let token=jwt.sign({"user":result},'Anjali')

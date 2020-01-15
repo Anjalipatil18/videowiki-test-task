@@ -5,6 +5,6 @@ app.use(express.json())
 const videowiki = require('../Route/videowiki')
 app.use("/videowiki",videowiki);
 
-app.listen(3000,()=>{
-    console.log("server is listening port number 3000.....")
+app.listen(8081,()=>{
+    console.log("server is listening port number 8081.....")
 })

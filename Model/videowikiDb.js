@@ -1,7 +1,10 @@
-const knex=require("./knex")
+const knex=require("../Model/knex")
 
 let insertDetails=(userDetails)=>{
     return knex.from("register").insert(userDetails)
 }
+let login = ()=>{
+    return knex.select('*').from('customer')
+}
 
-module.exports={insertDetails}
+module.exports={insertDetails,login}

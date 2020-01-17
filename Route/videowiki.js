@@ -29,7 +29,7 @@ videowiki.get("/login",(req,res)=>{
             if((result[i]["email"]==user.email) && (result[i]["password"]==user.password)){
                 jwt.sign(user,"SECRET_KEY",(err,token)=>{
                         res.json({
-                            token:token
+                            token:"Bearer "+token
                         })
                     })
             }
@@ -50,7 +50,7 @@ videowiki.get('/verification',(req,res)=>{
        }
     else {
         res.json({
-        message:"post created....",
+        message:"get created....",
         authData
     });
     }

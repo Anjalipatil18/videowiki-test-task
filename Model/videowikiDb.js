@@ -4,7 +4,7 @@ let insertDetails=(userDetails)=>{
     return knex.from("register").insert(userDetails)
 }
 let login = ()=>{
-    return knex.select('*').from('register')
+    return knex.select("email","password").from('register')
 }
 
 module.exports={insertDetails,login}

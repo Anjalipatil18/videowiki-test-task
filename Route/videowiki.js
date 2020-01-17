@@ -18,62 +18,42 @@ videowiki.post('/register',(req,res)=>{
     });
 });
 
-// videowiki.post('/login',(req,res)=>{
-//     let email=req.body.email 
-//     let password=req.body.password 
-//     let response = postvideowiki.login()
-//     response.then((result)=>{
-//         for(let i=0; i<result.length; i++){
-//             if((result[i]["email"]==email) && (result[i]["password"]==password)){
-//                 let token=jwt.sign({"user":result},'Anjali')
-//                 res.cookie(token)
-//                 jwt.verify(token, 'Anjali', (err,data) => {
-//                     res.send(data)
-//                 })
-//             }
-//         }
-//     })  
-// });
-
-
-videowiki.post("/login",(req,res)=>{
+videowiki.post("/error",(req,res,next)=>{
     const user={
-        email:req.body.email ,
-        password:req.body.password 
-    }
-    let response = postvideowiki.login()
-    response.then((result)=>{
-        for(let i=0; i<result.length; i++){
-            if((result[i]["email"]==user.email)&&(result[i]["password"]==user.password)){
-                jwt.sign(user,"SECRET_KEY",(err,token)=>{
-                    res.cookie(token)
-                    res.json({
-                        token:token
-                    })
-                })
-            }else{
-                res.json({"status":"wrong","massage":"Your password Or Email wrong"})
+                email:req.body.email ,
+                password:req.body.password 
             }
-        }
+    jwt.sign(user,"SECRET_KEY",(err,token)=>{
+        res.json({
+            token:"Bearer " + token
+        })
     })
-    
 })
 
-// Token verification function.
-videowiki.post('/api/posts',(req,res)=>{
+///Token verification function.
+function verifyToken(req,res,next){
     const bearerHeader = req.headers.authorization;
-    console.log(bearerHeader)
-    const bearerToken = bearerHeader.split();
-    // console.log(bearerToken)
-    req.token=bearerToken; 
-    jwt.verify((req.token),"SECRET_KEY",(authData,err)=>{
-       if(authData){
-            res.json({
-            message:"post created....",authData
-        });
+
+    if(typeof bearerHeader !== 'undefined'){
+        const bearerToken = bearerHeader.split(' ')[1];
+        req.token=bearerToken; 
+        next();
+
+    }else{
+       res.sendStatus(403);
+    }
+}
+
+videowiki.post('/api/posts',verifyToken,(req,res,next)=>{
+    jwt.verify((req.token),"SECRET_KEY",(err,authData)=>{
+       if(err){
+           res.sendStatus(403);
        }
     else {
-        res.sendStatus(403);
+        res.json({
+        message:"post created....",
+        authData
+    });
     }
     })
 });

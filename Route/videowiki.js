@@ -23,19 +23,21 @@ videowiki.get("/login",(req,res)=>{
                 email:req.body.email ,
                 password:req.body.password 
             }
-    let response=postvideowiki.login()
+    let response=postvideowiki.login(user)
     response.then((result)=>{
-        for(let i=0; i<result.length; i++){
-            if((result[i]["email"]==user.email) && (result[i]["password"]==user.password)){
-                jwt.sign(user,"SECRET_KEY",(err,token)=>{
-                        res.json({
-                            token:"Bearer "+token
-                        })
-                    })
-            }
+        if(result.length==0){
+            res.json({"massage":'your email is invalid'})
         }
-
-
+        else if(result[0]["password"]==user.password){
+            jwt.sign(user,"SECRET_KEY",(err,token)=>{
+                res.json({
+                    token:"Bearer "+token
+                })  
+            })
+        }
+        else {
+            res.json('wrong  password')
+        }
     })
     
 })

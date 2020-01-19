@@ -59,6 +59,18 @@ videowiki.get('/verification',(req,res)=>{
     })
 });
 
-videowiki.
+videowiki.post('/createPost',(req,res)=>{
+    const createPost={
+        post:req.body.post,
+        like:req.body.like,
+        comment:req.body.comment
+    }
+    let response = postvideowiki.createPost(createPost)
+    response.then((result)=>{
+        return res.json(result);
+    }).catch((err)=>{
+        res.send(err)
+    });
+})
 
 module.exports=videowiki

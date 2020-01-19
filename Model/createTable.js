@@ -2,7 +2,7 @@ const knex=require("./knex")
 knex.schema.createTable('createPost', (table) => {
     table.increments('id')
     table.string('post')
-    table.integer('like/dislike')
+    table.boolean('like')
     table.string('comment')
 })
     .then(() => {

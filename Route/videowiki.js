@@ -14,7 +14,7 @@ videowiki.post('/register',(req,res)=>{
     response.then((result)=>{
         return res.json(result);
     }).catch((err)=>{
-        res.send(err)
+        res.send("your email is already exits use another email")
     });
 });
 

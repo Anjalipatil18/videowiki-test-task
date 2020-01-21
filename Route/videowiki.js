@@ -61,17 +61,38 @@ videowiki.get('/verification',(req,res)=>{
 
 videowiki.post('/createPost',(req,res)=>{
     const createPost={
-        post:req.body.post,
-        like:req.body.like,
-        comment:req.body.comment
+        post:req.body.post
     }
     let response = postvideowiki.createPost(createPost)
+    response.then((result)=>{
+        return res.json(result);
+    }).catch((err)=>{
+        res.send(err)
+    });
+})
+
+videowiki.post('/createLikes',(req,res)=>{
+    const createLikes={
+        likes:req.body.likes,
+        comment:req.body.comment,
+        user_id:req.body.user_id,
+        post_id:req.body.post_id
+    }
+    let response = postvideowiki.createLikes(createLikes)
+    response.then((result)=>{
+        return res.json(result);
+    }).catch((err)=>{
+        res.send(err)
+    });
+})
+
+videowiki.get("/get",(req,res)=>{
     let selectPost=postvideowiki.selctData()
-    // console.log(selectPost)
-    selectPost.then((posts)=>{
-        console.log(posts)
+    selectPost.then((result)=>{
+    //     let counter=0
     //     for(var i = posts.length-1; i >= 0; i--) {
-    //         if(posts[i].post_likes.length > 0) { 
+    //         if(posts[i]> 0) { 
+    //             console.log(posts[i])
     //            for(var j = 0; j < posts[i].post_likes.length; j++) { 
     //                 if(posts[i].post_likes[j].like == true) { 
     //                     counter = counter + 1 
@@ -82,10 +103,12 @@ videowiki.post('/createPost',(req,res)=>{
     //             } 
     //         } 
     //    }
+       console.log(result)
         return res.json(result);
     }).catch((err)=>{
         res.send(err)
     });
+
 })
 
 module.exports=videowiki

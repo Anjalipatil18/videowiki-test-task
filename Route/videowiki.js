@@ -86,25 +86,19 @@ videowiki.post('/createLikes',(req,res)=>{
     });
 })
 
-videowiki.get("/get",(req,res)=>{
-    let selectPost=postvideowiki.selctData()
+videowiki.get("/get/:post_id",(req,res)=>{
+    let post_id=req.params.post_id;
+    let selectPost=postvideowiki.dataByUserId(post_id)
     selectPost.then((result)=>{
-    //     let counter=0
-    //     for(var i = posts.length-1; i >= 0; i--) {
-    //         if(posts[i]> 0) { 
-    //             console.log(posts[i])
-    //            for(var j = 0; j < posts[i].post_likes.length; j++) { 
-    //                 if(posts[i].post_likes[j].like == true) { 
-    //                     counter = counter + 1 
-    //                 } 
-    //                 else if(posts[i].post_likes[j].like == false) { 
-    //                     counter = counter - 1 
-    //                 } 
-    //             } 
-    //         } 
-    //    }
+        let counter=0
+        for(let i = 0; i<result.length; i++) {
+            if(result[i]["likes"]==1){
+                counter+=1
+            }
+             
+       }
        console.log(result)
-        return res.json(result);
+        return res.json({"massage":"likes_count","like":counter});
     }).catch((err)=>{
         res.send(err)
     });

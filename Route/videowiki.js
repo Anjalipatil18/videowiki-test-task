@@ -66,7 +66,22 @@ videowiki.post('/createPost',(req,res)=>{
         comment:req.body.comment
     }
     let response = postvideowiki.createPost(createPost)
-    response.then((result)=>{
+    let selectPost=postvideowiki.selctData()
+    // console.log(selectPost)
+    selectPost.then((posts)=>{
+        console.log(posts)
+    //     for(var i = posts.length-1; i >= 0; i--) {
+    //         if(posts[i].post_likes.length > 0) { 
+    //            for(var j = 0; j < posts[i].post_likes.length; j++) { 
+    //                 if(posts[i].post_likes[j].like == true) { 
+    //                     counter = counter + 1 
+    //                 } 
+    //                 else if(posts[i].post_likes[j].like == false) { 
+    //                     counter = counter - 1 
+    //                 } 
+    //             } 
+    //         } 
+    //    }
         return res.json(result);
     }).catch((err)=>{
         res.send(err)

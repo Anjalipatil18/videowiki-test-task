@@ -11,5 +11,8 @@ let login = (user)=>{
 let createPost=(userDetails)=>{
     return knex.from("createPost").insert(userDetails)
 }
+let selctData=()=>{
+    return knex.select("*").from("createPost")
+}
 
-module.exports={insertDetails,login,createPost}
+module.exports={insertDetails,login,createPost,selctData}

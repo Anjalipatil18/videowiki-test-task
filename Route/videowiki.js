@@ -12,7 +12,12 @@ videowiki.post('/register',(req,res)=>{
     }
     let response = postvideowiki.insertDetails(userDetails)
     response.then((result)=>{
-        return res.json(result);
+        jwt.sign(userDetails,"SECRET_KEY",(err,token)=>{
+            res.json({
+                token:"Bearer "+token
+            })  
+        })
+        return res.json(token);
     }).catch((err)=>{
         res.send("your email is already exits use another email")
     });
@@ -95,14 +100,11 @@ videowiki.get("/get/:post_id",(req,res)=>{
             if(result[i]["likes"]==1){
                 counter+=1
             }
-             
        }
-       console.log(result)
         return res.json({"massage":"likes_count","like":counter});
     }).catch((err)=>{
         res.send(err)
     });
-
 })
 
 module.exports=videowiki

@@ -1,5 +1,8 @@
 const express = require('express')
 const videowiki = express.Router()
+var cors = require('cors')
+videowiki.use(cors())
+
 videowiki.use(express.json())
 const jwt = require('jsonwebtoken')
 const postvideowiki = require('../Model/videowikiDb')

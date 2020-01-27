@@ -20,4 +20,8 @@ let dataByUserId=(post_id)=>{
     return knex.select('*').from("post_likes").where('post_id',post_id)
 }
 
-module.exports={insertDetails,login,createPost,createLikes,dataByUserId}
+let updatePost=(post,post_id)=>{
+    return knex('createPost').update(post).where('post_id',post_id)
+}
+
+module.exports={insertDetails,login,createPost,createLikes,dataByUserId,updatePost}

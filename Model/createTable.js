@@ -9,13 +9,16 @@ const knex=require("./knex")
 //     table.boolean('likes')
 //     table.string('comment')
 // })
+
 knex.schema.createTable('userInformation',(table)=>{
     table.increments('id')
     table.string('Name')
     table.integer('Birthday')
     table.integer('Mobile')
     table.string('Gender')
-    table.string('')
+    table.string('location')
+    table.string('education')
+    table.string('experience')
 })
     .then(() => {
         console.log("table created")

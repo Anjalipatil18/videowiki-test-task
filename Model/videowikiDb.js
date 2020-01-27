@@ -24,4 +24,9 @@ let updatePost=(post,post_id)=>{
     return knex('createPost').update(post).where('post_id',post_id)
 }
 
-module.exports={insertDetails,login,createPost,createLikes,dataByUserId,updatePost}
+
+let deleteByPostId=(post,post_id)=>{
+    return knex('createPost').where('post_id',post_id).del()
+}
+
+module.exports={insertDetails,login,createPost,createLikes,dataByUserId,updatePost,deleteByPostId}

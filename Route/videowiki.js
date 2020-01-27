@@ -110,4 +110,15 @@ videowiki.get("/get/:post_id",(req,res)=>{
     });
 })
 
+videowiki.put("/update/:post_id",(req,res)=>{
+    let post_id=req.params.post_id;
+    let update={post:req.body.post};
+    let updateData=postvideowiki.updatePost(update,post_id);
+    updateData.then((result)=>{
+        res.send("data updated")
+    }).catch((err)=>{
+        res.send(err)
+    })
+})
+
 module.exports=videowiki

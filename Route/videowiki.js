@@ -112,10 +112,23 @@ videowiki.get("/get/:post_id",(req,res)=>{
 
 videowiki.put("/update/:post_id",(req,res)=>{
     let post_id=req.params.post_id;
-    let update={post:req.body.post};
-    let updateData=postvideowiki.updatePost(update,post_id);
-    updateData.then((result)=>{
+    let updateData={post:req.body.post};
+    let response=postvideowiki.updatePost(updateData,post_id);
+    response.then((result)=>{
         res.send("data updated")
+    }).catch((err)=>{
+        res.send(err)
+    })
+})
+
+videowiki.delete("/delete/:post_id",(req,res)=>{
+    let post_id=req.params.post_id;
+    let deleteData ={
+        post:req.body.post
+    }
+    let response = postvideowiki.deleteByPostId(deleteData,post_id)
+    response.then((result)=>{
+        res.send("delete data!")
     }).catch((err)=>{
         res.send(err)
     })

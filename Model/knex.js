@@ -7,4 +7,5 @@ const knex = require('knex')({
         database: 'Authentication'
     }
 })
+
 module.exports = knex;

@@ -2,25 +2,19 @@ const express = require('express')
 const videowiki = express.Router()
 var cors = require('cors')
 videowiki.use(cors())
-
 videowiki.use(express.json())
 const jwt = require('jsonwebtoken')
 const postvideowiki = require('../Model/videowikiDb')
 
 videowiki.post('/register',(req,res)=>{
     var userDetails = {
-        Username:req.body.Username,
+        username:req.body.username,
         email:req.body.email, 
         password:req.body.password
     }
     let response = postvideowiki.insertDetails(userDetails)
     response.then((result)=>{
-        jwt.sign(userDetails,"SECRET_KEY",(err,token)=>{
-            res.json({
-                token:"Bearer "+token
-            })  
-        })
-        return res.json(token);
+        return res.json(result);
     }).catch((err)=>{
         res.send("your email is already exits use another email")
     });
@@ -44,7 +38,7 @@ videowiki.get("/login",(req,res)=>{
             })
         }
         else {
-            res.json('wrong  password')
+            res.json({"massage":'Your password is invalid'})
         }
     })
     
@@ -69,7 +63,9 @@ videowiki.get('/verification',(req,res)=>{
 
 videowiki.post('/createPost',(req,res)=>{
     const createPost={
-        post:req.body.post
+        user_id:req.body.user_id,
+        post:req.body.post,
+        caption:req.body.caption
     }
     let response = postvideowiki.createPost(createPost)
     response.then((result)=>{
@@ -120,6 +116,8 @@ videowiki.put("/update/:post_id",(req,res)=>{
         res.send(err)
     })
 })
+
+videowiki.get("/get/:")
 
 videowiki.delete("/delete/:post_id",(req,res)=>{
     let post_id=req.params.post_id;

@@ -77,7 +77,8 @@ videowiki.post('/createPost',(req,res)=>{
 
 videowiki.post('/createLikes',(req,res)=>{
     const createLikes={
-        likes:req.body.likes,
+        like:req.body.like,
+        dislike:req.body.dislike,
         comment:req.body.comment,
         user_id:req.body.user_id,
         post_id:req.body.post_id
@@ -92,13 +93,11 @@ videowiki.post('/createLikes',(req,res)=>{
 
 videowiki.get("/get/:post_id",(req,res)=>{
     let post_id=req.params.post_id;
-    let selectPost=postvideowiki.dataByUserId(post_id)
+    let selectPost=postvideowiki.getdataById(post_id)
     selectPost.then((result)=>{
         let counter=0
         for(let i = 0; i<result.length; i++) {
-            if(result[i]["likes"]==1){
-                counter+=1
-            }
+            counter+=result[i]["like"]
        }
         return res.json({"massage":"likes_count","like":counter});
     }).catch((err)=>{

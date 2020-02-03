@@ -69,7 +69,7 @@ videowiki.get('/createPost',(req,res)=>{
     const createPost={
         user_id:req.query.user_id,
         post:req.query.post,
-        caption:req.body.caption
+        caption:req.query.caption
     }
     let response = postvideowiki.createPost(createPost)
     response.then((result)=>{
@@ -79,13 +79,13 @@ videowiki.get('/createPost',(req,res)=>{
     });
 })
 
-videowiki.post('/createLikes',(req,res)=>{
+videowiki.get('/createLikes',(req,res)=>{
     const createLikes={
-        like:req.body.like,
-        dislike:req.body.dislike,
-        comment:req.body.comment,
-        user_id:req.body.user_id,
-        post_id:req.body.post_id
+        like:req.query.like,
+        dislike:req.query.dislike,
+        comment:req.query.comment,
+        user_id:req.query.user_id,
+        post_id:req.query.post_id
     }
     let response = postvideowiki.createLikes(createLikes)
     response.then((result)=>{

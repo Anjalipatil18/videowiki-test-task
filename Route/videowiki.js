@@ -79,13 +79,23 @@ videowiki.get('/createPost',(req,res)=>{
     });
 })
 
+videowiki.get('/getpost/:user_id',(req,res)=>{
+    let user_id=req.params.user_id;
+    let response=postvideowiki.postbyuser(user_id);
+    response.then((result)=>{
+        return res.json(result);
+    }).catch((err)=>{
+        res.send(err);
+    })
+})
+
+
 videowiki.get('/createLikes',(req,res)=>{
     const createLikes={
-        like:req.query.like,
-        dislike:req.query.dislike,
-        comment:req.query.comment,
-        user_id:req.query.user_id,
-        post_id:req.query.post_id
+        likes:req.body.likes,
+        comment:req.body.comment,
+        user_id:req.body.user_id,
+        post_id:req.body.post_id
     }
     let response = postvideowiki.createLikes(createLikes)
     response.then((result)=>{
@@ -95,11 +105,12 @@ videowiki.get('/createLikes',(req,res)=>{
     });
 })
 
-videowiki.get("/get/:post_id",(req,res)=>{
+videowiki.get("/get/:user_id/:post_id",(req,res)=>{
+    let user_id=req.params.user_id;
     let post_id=req.params.post_id;
-    let selectPost=postvideowiki.getdataById(post_id)
+    let selectPost=postvideowiki.dataByUserId(post_id)
+    let counter=0
     selectPost.then((result)=>{
-        let counter=0
         for(let i = 0; i<result.length; i++) {
             counter+=result[i]["like"]
        }
@@ -109,38 +120,38 @@ videowiki.get("/get/:post_id",(req,res)=>{
     });
 })
 
-videowiki.get("/post",(req,res)=>{
-    let user={
-            account:req.query.account,
-            status:req.query.status
-        }
-    let response=postvideowiki.postdata(user);
-    response.then((result)=>{
-        res.send(result)
-    }).catch((err)=>{
-        res.send(err)
-    })
-    })
+// videowiki.get("/post",(req,res)=>{
+//     let user={
+//             account:req.query.account,
+//             status:req.query.status
+//         }
+//     let response=postvideowiki.postdata(user);
+//     response.then((result)=>{
+//         res.send(result)
+//     }).catch((err)=>{
+//         res.send(err)
+//     })
+//     })
 
-videowiki.get("/get",(req,res)=>{
-    let response=postvideowiki.selectData();
-    response.then((result)=>{
-        let sum=0
-        let sum1=0
-        for(let i=0; i<result.length; i++){
-            if(result[i]['status']==1){
-                console.log(result[i]['account'])
-                sum=sum+result[i]['account']
-            }else if(result[i]['status']==0){
-                sum1=sum1+result[i]['account']
-            }
-        }
-        console.log(sum,sum1)
-        // res.send(sum)        
-    }).catch((err)=>{
-        res.send(err)
-    })
-    })
+// videowiki.get("/get",(req,res)=>{
+//     let response=postvideowiki.selectData();
+//     response.then((result)=>{
+//         let sum=0
+//         let sum1=0
+//         for(let i=0; i<result.length; i++){
+//             if(result[i]['status']==1){
+//                 console.log(result[i]['account'])
+//                 sum=sum+result[i]['account']
+//             }else if(result[i]['status']==0){
+//                 sum1=sum1+result[i]['account']
+//             }
+//         }
+//         console.log(sum,sum1)
+//         // res.send(sum)        
+//     }).catch((err)=>{
+//         res.send(err)
+//     })
+//     })
     
 
 videowiki.put("/update/:post_id",(req,res)=>{

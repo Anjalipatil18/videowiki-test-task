@@ -24,20 +24,17 @@ let dataByUserId=(post_id)=>{
     return knex.select('*').from("post_likes").where('post_id',post_id)
 }
 
+let getHomepageData=()=>{
+    return knex.select('createPost.user_id','').from("register").innerJoin('createPost').innerJoin('post_likes')
+}
+
 let updatePost=(post,post_id)=>{
     return knex('createPost').update(post).where('post_id',post_id)
 }
 
-let deleteByPostId=(post,post_id)=>{
+let deleteByPostId=(post_id)=>{
     return knex('createPost').where('post_id',post_id).del()
 }
 
-// let postdata=(post)=>{
-//     return knex('userInformation').insert(post)
-// }
 
-// let selectData=()=>{
-//     return knex.select('*').from('userInformation')
-// }
-
-module.exports={insertDetails,login,createPost,createLikes,dataByUserId,updatePost,deleteByPostId,postbyuser}
+module.exports={insertDetails,login,createPost,createLikes,dataByUserId,getHomepageData,updatePost,deleteByPostId,postbyuser}

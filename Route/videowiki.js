@@ -107,10 +107,12 @@ videowiki.post('/createLikes',(req,res)=>{
     });
 })
 
+
 videowiki.get("/get/:post_id",(req,res)=>{
     let post_id=req.params.post_id;
+    // let user_id=req.params.user_id;
     let selectPost=postvideowiki.dataByUserId(post_id)
-    counter=0
+    let counter=0
     selectPost.then((result)=>{
         for(let i = 0; i<result.length; i++) {
             if (result[i]["likes"]==true){
@@ -118,9 +120,20 @@ videowiki.get("/get/:post_id",(req,res)=>{
             }else if(result[i]["likes"]==false){
                 counter=counter-1
             }
-       }
-        return res.json({"massage":"likes_count","likes":counter});
-    }).catch((err)=>{
+       }    
+    let homePage=postvideowiki.getHomepageData()
+    homePage.then((data)=>{
+        let post={
+            username:data[0]['username'],
+            comment:data[0]['comment'],
+            caption:data[0]['caption'],
+            post:data[0]['post'],
+            likes:counter
+        }
+        res.send(post)
+    })
+    })
+    .catch((err)=>{
         res.send(err)
     });
 })

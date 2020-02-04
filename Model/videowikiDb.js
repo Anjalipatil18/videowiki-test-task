@@ -20,8 +20,6 @@ let createLikes =(likes)=>{
     return knex.from("post_likes").insert(likes)
 }
 
-
-
 let dataByUserId=(post_id)=>{
     return knex.select('*').from("post_likes").where('post_id',post_id)
 }

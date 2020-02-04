@@ -6,11 +6,11 @@ videowiki.use(express.json())
 const jwt = require('jsonwebtoken')
 const postvideowiki = require('../Model/videowikiDb')
 
-videowiki.get('/register',(req,res)=>{
+videowiki.post('/register',(req,res)=>{
     var userDetails = {
-        username:req.query.username,
-        email:req.query.email, 
-        password:req.query.password
+        username:req.body.username,
+        email:req.body.email, 
+        password:req.body.password
     }
     let response = postvideowiki.insertDetails(userDetails)
     response.then((result)=>{
@@ -22,8 +22,8 @@ videowiki.get('/register',(req,res)=>{
 
 videowiki.get("/login",(req,res)=>{
     const user={
-                email:req.query.email ,
-                password:req.query.password 
+                email:req.body.email ,
+                password:req.body.password 
             }
     let response=postvideowiki.login(user)
     response.then((result)=>{
@@ -65,11 +65,11 @@ videowiki.get('/verification',(req,res)=>{
     })
 });
 
-videowiki.get('/createPost',(req,res)=>{
+videowiki.post('/createPost',(req,res)=>{
     const createPost={
-        user_id:req.query.user_id,
-        post:req.query.post,
-        caption:req.query.caption
+        user_id:req.body.user_id,
+        post:req.body.post,
+        caption:req.body.caption
     }
     let response = postvideowiki.createPost(createPost)
     response.then((result)=>{
@@ -83,14 +83,16 @@ videowiki.get('/getpost/:user_id',(req,res)=>{
     let user_id=req.params.user_id;
     let response=postvideowiki.postbyuser(user_id);
     response.then((result)=>{
-        return res.json(result);
+        for(let i=result.length; i>=0; i--){
+            res.send(result[1])
+        }
     }).catch((err)=>{
         res.send(err);
     })
 })
 
 
-videowiki.get('/createLikes',(req,res)=>{
+videowiki.post('/createLikes',(req,res)=>{
     const createLikes={
         likes:req.body.likes,
         comment:req.body.comment,
@@ -105,54 +107,23 @@ videowiki.get('/createLikes',(req,res)=>{
     });
 })
 
-videowiki.get("/get/:user_id/:post_id",(req,res)=>{
-    let user_id=req.params.user_id;
+videowiki.get("/get/:post_id",(req,res)=>{
     let post_id=req.params.post_id;
     let selectPost=postvideowiki.dataByUserId(post_id)
-    let counter=0
+    counter=0
     selectPost.then((result)=>{
         for(let i = 0; i<result.length; i++) {
-            counter+=result[i]["like"]
+            if (result[i]["likes"]==true){
+                counter=counter+1
+            }else if(result[i]["likes"]==false){
+                counter=counter-1
+            }
        }
-        return res.json({"massage":"likes_count","like":counter});
+        return res.json({"massage":"likes_count","likes":counter});
     }).catch((err)=>{
         res.send(err)
     });
 })
-
-// videowiki.get("/post",(req,res)=>{
-//     let user={
-//             account:req.query.account,
-//             status:req.query.status
-//         }
-//     let response=postvideowiki.postdata(user);
-//     response.then((result)=>{
-//         res.send(result)
-//     }).catch((err)=>{
-//         res.send(err)
-//     })
-//     })
-
-// videowiki.get("/get",(req,res)=>{
-//     let response=postvideowiki.selectData();
-//     response.then((result)=>{
-//         let sum=0
-//         let sum1=0
-//         for(let i=0; i<result.length; i++){
-//             if(result[i]['status']==1){
-//                 console.log(result[i]['account'])
-//                 sum=sum+result[i]['account']
-//             }else if(result[i]['status']==0){
-//                 sum1=sum1+result[i]['account']
-//             }
-//         }
-//         console.log(sum,sum1)
-//         // res.send(sum)        
-//     }).catch((err)=>{
-//         res.send(err)
-//     })
-//     })
-    
 
 videowiki.put("/update/:post_id",(req,res)=>{
     let post_id=req.params.post_id;
@@ -164,7 +135,6 @@ videowiki.put("/update/:post_id",(req,res)=>{
         res.send(err)
     })
 })
-
 
 videowiki.delete("/delete/:post_id",(req,res)=>{
     let post_id=req.params.post_id;
